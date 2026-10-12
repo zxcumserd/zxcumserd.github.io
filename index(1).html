@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>МЕДВЕДЕВ РОМАН — Прикладная информатика / Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Syne:wght@600;800&family=Instrument+Serif:ital@0;1&display=swap');
+  :root{
+    --bg:#0E0E0E;
+    --bg2:#151515;
+    --paper:#F3EFE6;
+    --paper2:#E8E2D5;
+    --lime:#E8FF59;
+    --orange:#FF4E1F;
+    --purple:#7C5CFF;
+    --green:#2EFF8B;
+    --text:#F3EFE6;
+    --text-dark:#0E0E0E;
+    --line:rgba(243,239,230,.12);
+    --radius:24px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth;cursor:none}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'JetBrains Mono', monospace;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{background:var(--lime);color:var(--text-dark)}
+  a{color:inherit;text-decoration:none;cursor:none}
+  button{cursor:none;border:none;background:none;color:inherit;font:inherit}
+
+  /* noise */
+  body:after{
+    content:"";
+    position:fixed;inset:-50%;
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    opacity:.04;pointer-events:none;z-index:9999;animation:noiseShift .2s infinite linear;
+  }
+  @keyframes noiseShift{0%{transform:translate(0,0)}100%{transform:translate(1%,1%)}}
+
+  /* custom cursor */
+  .cursor{
+    position:fixed;top:0;left:0;width:36px;height:36px;border:1px solid var(--paper);
+    border-radius:50%;pointer-events:none;z-index:10000;mix-blend-mode:difference;
+    transition:width .25s, height .25s, background .25s, border-color .25s;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .cursor-dot{
+    position:fixed;top:0;left:0;width:4px;height:4px;background:var(--lime);
+    border-radius:50%;pointer-events:none;z-index:10001;mix-blend-mode:normal;
+  }
+  .cursor.hover{width:90px;height:90px;background:var(--paper);border-color:var(--paper)}
+  .cursor.hover:after{
+    content:attr(data-label);font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-dark)
+  }
+  @media(pointer:coarse){.cursor,.cursor-dot{display:none} html,a,button{cursor:auto}}
+
+  /* header */
+  header{
+    position:fixed;top:0;left:0;right:0;z-index:100;
+    display:flex;justify-content:space-between;align-items:center;
+    padding:18px 24px;mix-blend-mode:difference;
+  }
+  .logo{
+    display:flex;align-items:center;gap:12px;
+    font-family:'Syne',sans-serif;font-weight:800;font-size:14px;letter-spacing:-.02em;
+  }
+  .logo-mark{
+    width:36px;height:36px;background:var(--lime);color:var(--text-dark);
+    display:grid;place-items:center;border-radius:10px;font-size:16px;font-weight:800;
+  }
+  nav{display:flex;gap:28px;align-items:center}
+  nav a{font-size:12px;letter-spacing:.12em;text-transform:uppercase;opacity:.8;transition:.2s}
+  nav a:hover{opacity:1;color:var(--lime)}
+  .menu-btn{
+    width:44px;height:44px;border-radius:50%;background:var(--paper);color:var(--text-dark);
+    display:grid;place-items:center;font-weight:700;
+  }
+
+  /* hero */
+  .hero{
+    min-height:100svh;
+    display:grid;grid-template-columns:1.15fr .85fr;
+    padding:110px 24px 24px;gap:24px;
+    position:relative;
+  }
+  .hero-left{
+    background:var(--paper);color:var(--text-dark);
+    border-radius:var(--radius);padding:36px 36px 28px;
+    display:flex;flex-direction:column;justify-content:space-between;
+    position:relative;overflow:hidden;
+  }
+  .hero-left:before{
+    content:"";position:absolute;top:-40%;right:-20%;width:70%;aspect-ratio:1;
+    background:radial-gradient(circle at center, var(--lime) 0%, transparent 70%);
+    opacity:.6;pointer-events:none;
+  }
+  .eyebrow{
+    display:flex;gap:10px;align-items:center;
+    font-size:11px;letter-spacing:.18em;text-transform:uppercase;opacity:.6
+  }
+  .eyebrow i{width:6px;height:6px;background:var(--orange);border-radius:50%;display:inline-block;animation:pulse 1.5s infinite}
+  @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.6)}}
+  .hero-title{
+    font-family:'Syne',sans-serif;
+    font-size:clamp(44px,7.2vw,108px);
+    line-height:.88;letter-spacing:-.04em;font-weight:800;
+    margin:18px 0 0;
+  }
+  .hero-title em{
+    font-family:'Instrument Serif',serif;font-weight:400;font-style:italic;
+    letter-spacing:-.02em;color:var(--orange)
+  }
+  .hero-title .stroke{
+    -webkit-text-stroke:1.2px var(--text-dark);color:transparent;
+  }
+  .hero-bottom{
+    display:flex;justify-content:space-between;align-items:end;gap:20px;margin-top:28px;
+    border-top:1px solid rgba(14,14,14,.12);padding-top:18px;
+  }
+  .hero-desc{max-width:360px;font-size:13.5px;line-height:1.6;opacity:.8}
+  .hero-meta{display:flex;gap:8px;flex-wrap:wrap}
+  .pill{
+    border:1px solid rgba(14,14,14,.18);border-radius:100px;
+    padding:6px 12px;font-size:10px;letter-spacing:.08em;text-transform:uppercase;
+  }
+  .hero-right{
+    display:flex;flex-direction:column;gap:24px;
+  }
+  .playground{
+    flex:1;background:var(--bg2);border:1px solid var(--line);
+    border-radius:var(--radius);position:relative;overflow:hidden;
+    min-height:520px;
+  }
+  .playground-header{
+    position:absolute;top:0;left:0;right:0;z-index:2;
+    display:flex;justify-content:space-between;padding:18px 20px;
+    font-size:10px;letter-spacing:.14em;text-transform:uppercase;opacity:.5;
+  }
+  .playground canvas{position:absolute;inset:0;width:100%;height:100%}
+  .badge{
+    position:absolute;user-select:none;touch-action:none;
+    padding:10px 16px;border-radius:100px;
+    font-family:'Syne',sans-serif;font-weight:700;font-size:13px;
+    letter-spacing:-.01em;display:flex;align-items:center;gap:8px;
+    box-shadow:0 10px 30px rgba(0,0,0,.25);
+    cursor:grab;will-change:transform;
+    transition:box-shadow .2s, filter .2s;
+  }
+  .badge:active{cursor:grabbing;z-index:10!important;box-shadow:0 20px 50px rgba(0,0,0,.4)}
+  .badge b{font-size:10px;opacity:.7;font-family:'JetBrains Mono',monospace;font-weight:400}
+  .badge.python{background:var(--lime);color:var(--text-dark);transform:rotate(-6deg)}
+  .badge.react{background:var(--paper);color:var(--text-dark);transform:rotate(4deg)}
+  .badge.sql{background:var(--purple);color:white;transform:rotate(-2deg)}
+  .badge.oneC{background:var(--orange);color:white;transform:rotate(7deg)}
+  .badge.docker{background:#0db7ed;color:white}
+  .badge.figma{background:var(--green);color:var(--text-dark)}
+  .badge.n8n{background:white;color:var(--text-dark)}
+  .badge.bot{background:var(--paper2);color:var(--text-dark)}
+
+  .hero-cta{
+    display:grid;grid-template-columns:1fr 1fr;gap:16px;
+  }
+  .cta-big{
+    background:var(--orange);color:white;border-radius:18px;
+    padding:20px 22px;display:flex;justify-content:space-between;align-items:center;
+    font-family:'Syne',sans-serif;font-weight:800;font-size:18px;letter-spacing:-.02em;
+    transition:.3s transform;
+  }
+  .cta-big:hover{transform:translateY(-2px)}
+  .cta-small{
+    background:var(--paper);color:var(--text-dark);border-radius:18px;
+    padding:20px 22px;font-size:12px;line-height:1.5;
+  }
+  .cta-small strong{display:block;font-family:'Syne',sans-serif;font-size:22px;margin-bottom:4px}
+
+  /* marquee */
+  .marquee{
+    border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+    padding:14px 0;overflow:hidden;white-space:nowrap;background:var(--bg);
+    position:relative;
+  }
+  .marquee-track{display:flex;animation:marquee 28s linear infinite;width:max-content}
+  .marquee-item{
+    display:flex;align-items:center;gap:22px;padding-right:22px;
+    font-family:'Syne',sans-serif;font-weight:800;font-size:18px;letter-spacing:-.02em;
+    text-transform:uppercase;
+  }
+  .marquee-item:after{content:"•";color:var(--lime)}
+  @keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+  /* about desk - yandex intern vibe */
+  .desk-section{
+    padding:28px 24px 24px;
+  }
+  .section-head{
+    display:flex;justify-content:space-between;align-items:end;
+    padding:36px 8px 18px;gap:20px;
+  }
+  .section-head h2{
+    font-family:'Syne',sans-serif;font-size:clamp(32px,5vw,64px);
+    line-height:.9;letter-spacing:-.04em;font-weight:800;
+  }
+  .section-head p{max-width:360px;font-size:13px;line-height:1.6;opacity:.6}
+  .desk{
+    background:var(--paper2);border-radius:var(--radius);
+    min-height:720px;position:relative;overflow:hidden;
+    padding:24px;
+    background-image:
+      radial-gradient(rgba(0,0,0,.06) 1px, transparent 1px);
+    background-size:22px 22px;
+  }
+  .desk:before{
+    content:"";position:absolute;inset:0;
+    background:radial-gradient(800px 600px at 70% 20%, rgba(255,78,31,.12), transparent 60%),
+               radial-gradient(600px 500px at 10% 80%, rgba(124,92,255,.14), transparent 60%);
+    pointer-events:none;
+  }
+  .desk-card{
+    position:absolute;background:var(--paper);color:var(--text-dark);
+    border-radius:18px;padding:18px 18px 16px;
+    box-shadow:0 12px 40px rgba(0,0,0,.14), 0 1px 0 rgba(0,0,0,.06) inset;
+    width:300px;cursor:grab;user-select:none;
+    transition:box-shadow .2s;
+  }
+  .desk-card:active{cursor:grabbing;box-shadow:0 24px 60px rgba(0,0,0,.22)}
+  .desk-card .tag{
+    font-size:9px;letter-spacing:.14em;text-transform:uppercase;
+    background:var(--text-dark);color:var(--paper);display:inline-block;
+    padding:4px 8px;border-radius:100px;margin-bottom:12px;
+  }
+  .desk-card h3{font-family:'Syne',sans-serif;font-size:18px;line-height:1.1;letter-spacing:-.02em;margin-bottom:8px}
+  .desk-card p{font-size:12.5px;line-height:1.55;opacity:.75}
+  .desk-card .meta{margin-top:14px;display:flex;gap:6px;flex-wrap:wrap}
+  .desk-card .meta span{font-size:10px;border:1px solid rgba(0,0,0,.12);padding:4px 8px;border-radius:100px}
+  .polaroid{
+    background:white;padding:10px 10px 36px;border-radius:4px;
+    transform:rotate(-3deg);box-shadow:0 12px 30px rgba(0,0,0,.18);
+    width:220px;
+  }
+  .polaroid img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;border-radius:2px;background:#ddd}
+  .polaroid span{
+    display:block;margin-top:10px;font-family:'Instrument Serif',serif;
+    font-style:italic;font-size:16px;color:#222;text-align:center;
+  }
+  .tape{
+    position:absolute;top:-10px;left:50%;transform:translateX(-50%) rotate(-2deg);
+    width:80px;height:22px;background:rgba(232,255,89,.85);
+    box-shadow:0 1px 3px rgba(0,0,0,.1);backdrop-filter:blur(2px);
+  }
+
+  /* projects - merci michel */
+  .projects{padding:24px}
+  .filters{
+    display:flex;gap:8px;flex-wrap:wrap;margin:0 8px 18px;
+  }
+  .filter-btn{
+    border:1px solid var(--line);border-radius:100px;
+    padding:8px 16px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+    transition:.2s;
+  }
+  .filter-btn.active{background:var(--paper);color:var(--text-dark);border-color:var(--paper)}
+  .grid{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:16px;
+  }
+  @media(max-width:1000px){.hero{grid-template-columns:1fr}.grid{grid-template-columns:1fr 1fr}.desk{min-height:1100px}}
+  @media(max-width:640px){.grid{grid-template-columns:1fr}.hero-left{padding:22px}.section-head{flex-direction:column;align-items:start}}
+  .project-card{
+    background:var(--bg2);border:1px solid var(--line);border-radius:20px;
+    overflow:hidden;position:relative;group:card;
+    transition:.35s transform, .35s border-color;
+  }
+  .project-card:hover{transform:translateY(-4px);border-color:rgba(243,239,230,.22)}
+  .project-media{
+    aspect-ratio:16/10;position:relative;overflow:hidden;background:#1a1a1a;
+  }
+  .project-media img{
+    width:100%;height:100%;object-fit:cover;transition:transform .8s cubic-bezier(.16,1,.3,1), filter .4s;
+  }
+  .project-card:hover .project-media img{transform:scale(1.06) rotate(.6deg);filter:brightness(1.05)}
+  .project-media .float-tag{
+    position:absolute;top:12px;left:12px;background:var(--lime);color:var(--text-dark);
+    font-size:10px;letter-spacing:.08em;text-transform:uppercase;
+    padding:6px 10px;border-radius:100px;font-weight:700;z-index:2;
+  }
+  .project-info{padding:16px 18px 18px;display:flex;flex-direction:column;gap:10px}
+  .project-info h3{font-family:'Syne',sans-serif;font-size:20px;line-height:1.05;letter-spacing:-.02em}
+  .project-info p{font-size:12.5px;line-height:1.5;opacity:.65}
+  .project-foot{display:flex;justify-content:space-between;align-items:center;margin-top:6px}
+  .stack{display:flex;gap:6px;flex-wrap:wrap}
+  .stack i{font-style:normal;font-size:10px;border:1px solid var(--line);padding:4px 8px;border-radius:100px;opacity:.7}
+
+  /* hover preview image that follows cursor like merci-michel */
+  .hover-preview{
+    position:fixed;width:300px;aspect-ratio:16/11;border-radius:14px;overflow:hidden;
+    pointer-events:none;z-index:50;opacity:0;transform:translate(-50%,-50%) scale(.9) rotate(-3deg);
+    transition:opacity .25s, transform .35s cubic-bezier(.16,1,.3,1);
+    box-shadow:0 20px 60px rgba(0,0,0,.5);
+  }
+  .hover-preview.visible{opacity:1;transform:translate(-50%,-50%) scale(1) rotate(2deg)}
+  .hover-preview img{width:100%;height:100%;object-fit:cover}
+
+  /* lab - borjomi parallax */
+  .lab{
+    margin:24px;border-radius:var(--radius);overflow:hidden;
+    background:var(--paper);color:var(--text-dark);
+    display:grid;grid-template-columns:1.1fr .9fr;min-height:560px;
+  }
+  .lab-visual{
+    background:radial-gradient(120% 120% at 30% 20%, #FFD9C8 0%, #FF4E1F 38%, #7C5CFF 78%, #0E0E0E 100%);
+    position:relative;overflow:hidden;display:grid;place-items:center;
+  }
+  .bottle{
+    width:200px;height:380px;background:linear-gradient(180deg, rgba(255,255,255,.9), rgba(255,255,255,.4));
+    border-radius:80px 80px 24px 24px;position:relative;
+    box-shadow:0 30px 80px rgba(0,0,0,.3), inset 0 1px 1px rgba(255,255,255,.8);
+    backdrop-filter:blur(12px);transform-style:preserve-3d;
+    transition:transform .1s linear;
+  }
+  .bottle:after{
+    content:"BORJOMI × CODE";position:absolute;top:50%;left:50%;
+    transform:translate(-50%,-50%) rotate(-90deg);
+    font-family:'Syne',sans-serif;font-weight:800;letter-spacing:.2em;font-size:12px;
+    color:rgba(14,14,14,.7);white-space:nowrap;
+  }
+  .bottle-cap{
+    position:absolute;top:-18px;left:50%;transform:translateX(-50%);
+    width:56px;height:22px;background:var(--lime);border-radius:8px 8px 4px 4px;
+  }
+  .lab-content{padding:32px;display:flex;flex-direction:column;justify-content:space-between}
+  .lab-content h2{font-family:'Syne',sans-serif;font-size:48px;line-height:.9;letter-spacing:-.04em}
+  .lab-list{margin-top:20px;display:flex;flex-direction:column;gap:14px}
+  .lab-item{
+    display:flex;gap:14px;padding:14px 0;border-bottom:1px solid rgba(14,14,14,.1);
+  }
+  .lab-item b{font-size:12px;min-width:28px;height:28px;display:grid;place-items:center;
+    background:var(--text-dark);color:var(--paper);border-radius:50%}
+  .lab-item p{font-size:13px;line-height:1.5}
+  @media(max-width:900px){.lab{grid-template-columns:1fr}.lab-visual{min-height:380px}}
+
+  /* contact */
+  .contact{
+    padding:24px;display:grid;grid-template-columns:1fr 1fr;gap:16px;
+  }
+  .contact-big{
+    background:var(--lime);color:var(--text-dark);border-radius:var(--radius);
+    padding:36px;position:relative;overflow:hidden;
+  }
+  .contact-big h2{
+    font-family:'Syne',sans-serif;font-size:clamp(36px,6vw,84px);
+    line-height:.86;letter-spacing:-.05em;font-weight:800;
+  }
+  .contact-big h2 i{font-family:'Instrument Serif',serif;font-weight:400;font-style:italic}
+  .contact-actions{margin-top:32px;display:flex;gap:12px;flex-wrap:wrap}
+  .btn-magnetic{
+    display:inline-flex;align-items:center;justify-content:center;
+    padding:14px 22px;border-radius:100px;font-weight:700;font-size:13px;
+    letter-spacing:.02em;transition:transform .15s linear;
+    position:relative;
+  }
+  .btn-dark{background:var(--text-dark);color:var(--paper)}
+  .btn-light{background:var(--paper);color:var(--text-dark);border:1px solid rgba(0,0,0,.12)}
+  .contact-side{
+    display:flex;flex-direction:column;gap:16px;
+  }
+  .contact-card{
+    background:var(--bg2);border:1px solid var(--line);border-radius:20px;padding:22px;
+    flex:1;
+  }
+  .contact-card h4{font-size:11px;letter-spacing:.14em;text-transform:uppercase;opacity:.5;margin-bottom:14px}
+  .contact-card .big{font-family:'Syne',sans-serif;font-size:20px;line-height:1.2}
+  @media(max-width:900px){.contact{grid-template-columns:1fr}}
+
+  footer{
+    padding:18px 24px 24px;display:flex;justify-content:space-between;
+    font-size:10px;letter-spacing:.12em;text-transform:uppercase;opacity:.4;
+    border-top:1px solid var(--line);margin-top:8px;
+  }
+
+  /* terminal - toyfight */
+  .terminal{
+    position:fixed;inset:0;z-index:200;background:rgba(14,14,14,.92);
+    backdrop-filter:blur(18px);display:none;flex-direction:column;
+    padding:24px;
+  }
+  .terminal.open{display:flex}
+  .term-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+  .term-body{flex:1;background:#111;border:1px solid rgba(243,239,230,.12);border-radius:16px;padding:18px;overflow:auto;
+    font-size:13px;line-height:1.7}
+  .term-input-row{display:flex;gap:10px;margin-top:12px}
+  .term-input-row span{color:var(--lime)}
+  .term-input{
+    flex:1;background:transparent;border:none;outline:none;color:var(--paper);
+    font-family:'JetBrains Mono',monospace;font-size:13px;
+  }
+  .term-hint{font-size:11px;opacity:.4;margin-top:10px}
+  .cmd{color:var(--lime)} .out{opacity:.7}
+
+  /* reveal */
+  .reveal{opacity:0;transform:translateY(18px);transition:.7s cubic-bezier(.16,1,.3,1)}
+  .reveal.in{opacity:1;transform:none}
+
+  /* scrollbar */
+  ::-webkit-scrollbar{width:8px;height:8px}
+  ::-webkit-scrollbar-thumb{background:rgba(243,239,230,.15);border-radius:100px}
+</style>
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="hover-preview" id="hoverPreview"><img src="" alt=""></div>
+
+<header>
+  <div class="logo">
+    <div class="logo-mark">М</div>
+    <div>МЕДВЕДЕВ РОМАН — 2026 / SAMARA</div>
+  </div>
+  <nav>
+    <a href="#about" class="nav-link" data-label="ОБО МНЕ">Обо мне</a>
+    <a href="#projects" class="nav-link" data-label="ПРОЕКТЫ">Проекты</a>
+    <a href="#lab" class="nav-link" data-label="ЛАБ">Лаб</a>
+    <a href="#contact" class="nav-link" data-label="СВЯЗЬ">Контакты</a>
+    <button class="menu-btn" id="termOpen">⌘</button>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="hero-left reveal">
+    <div>
+      <div class="eyebrow"><i></i> открыт к стажировке • прикладная информатика, 3 курс</div>
+      <h1 class="hero-title">
+        Я — <em>прикладной</em><br>
+        информатик,<br>
+        <span class="stroke">делаю</span> цифровые<br>
+        продукты.
+      </h1>
+    </div>
+    <div class="hero-bottom">
+      <p class="hero-desc">Студент Тольяттинского университета. Люблю когда <b>всё лежит прикольно</b> — как на столе у стажера Яндекса, но работает как часы. Python, SQL, 1С, веб и боты. Ищу команду, где можно расти.</p>
+      <div class="hero-meta">
+        <span class="pill">Самара → удалёнка</span>
+        <span class="pill">GPA 4.6</span>
+        <span class="pill">Английский B2</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="playground" id="playground">
+      <div class="playground-header">
+        <span>drag & throw — интерактив как на heliasoils / toyfight</span>
+        <span id="playHint">перетащи стек →</span>
+      </div>
+      <!-- badges -->
+      <div class="badge python" style="left:18%;top:22%" data-vx="0.6" data-vy="-0.4"><b>01</b> PYTHON</div>
+      <div class="badge react" style="left:52%;top:18%" data-vx="-0.5" data-vy="0.7"><b>02</b> REACT + TS</div>
+      <div class="badge sql" style="left:32%;top:46%" data-vx="0.8" data-vy="0.3"><b>03</b> POSTGRES / SQL</div>
+      <div class="badge oneC" style="left:62%;top:52%" data-vx="-0.7" data-vy="-0.6"><b>04</b> 1С:ПРЕДПРИЯТИЕ</div>
+      <div class="badge docker" style="left:12%;top:68%" data-vx="0.4" data-vy="-0.8"><b>05</b> DOCKER</div>
+      <div class="badge figma" style="left:48%;top:74%" data-vx="-0.3" data-vy="0.5"><b>06</b> FIGMA → CODE</div>
+      <div class="badge n8n" style="left:70%;top:32%" data-vx="0.9" data-vy="0.2"><b>07</b> N8N / AUTOMATION</div>
+      <div class="badge bot" style="left:22%;top:84%" data-vx="-0.6" data-vy="-0.3"><b>08</b> TELEGRAM BOTS</div>
+    </div>
+    <div class="hero-cta">
+      <a href="#projects" class="cta-big magnetic" data-label="СМОТРЕТЬ">
+        <span>Смотреть проекты →</span>
+        <span style="font-size:28px">↗</span>
+      </a>
+      <div class="cta-small">
+        <strong>12+ проектов</strong>
+        от CRM для автосервиса до парсера маркетплейсов. Все с гитхабом, деплоем и документацией. Интерактив как на Borjomi — попробуй потрясти бутылку в блоке ЛАБ.
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="marquee">
+  <div class="marquee-track" id="marqueeTrack">
+    <!-- duplicated via JS -->
+  </div>
+</div>
+
+<section class="desk-section" id="about">
+  <div class="section-head reveal">
+    <h2>Всё лежит<br><span style="font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;color:var(--lime)">прикольно</span> — но по системе.</h2>
+    <p>Вдохновился страницей yaintern Яндекса: хаос на столе — порядок в голове. Каждую карточку можно перетащить, бросить, повертеть. Как в реальной жизни студента ПИ.</p>
+  </div>
+  <div class="desk" id="desk">
+    <div class="desk-card" style="left:3%;top:8%;transform:rotate(-2deg)" data-rot="-2">
+      <div class="tag">образование</div>
+      <h3>Самарский университет<br>Прикладная информатика</h3>
+      <p>3 курс, профиль — разработка ИС. Курсовые: моделирование бизнес-процессов (BPMN), БД автосалона, веб-приложение учета.</p>
+      <div class="meta"><span>2023—2027</span><span>SQL</span><span>UML</span><span>1C</span></div>
+    </div>
+
+    <div class="desk-card" style="left:36%;top:6%;transform:rotate(1.5deg);width:320px" data-rot="1.5">
+      <div class="tag" style="background:var(--orange)">что делаю</div>
+      <h3>Fullstack для малого бизнеса + автоматизация</h3>
+      <p>Собираю MVP за 1–2 недели: бекенд Python (FastAPI), фронт React, деплой в Docker. Автоматизирую рутину через n8n, ботов, парсеры. Понимаю 1С — могу стать мостом между бизнесом и кодом.</p>
+      <div class="meta"><span>FastAPI</span><span>React</span><span>Telegram API</span><span>1C:ERP</span></div>
+    </div>
+
+    <div class="desk-card" style="left:68%;top:12%;transform:rotate(-1deg);width:280px;background:var(--lime)" data-rot="-1">
+      <div class="tag">факт</div>
+      <h3>Люблю интерактив как на Toyfight & Merci-Michel</h3>
+      <p>Сайт — не PDF. Поэтому тут физика, перетаскивания, командная строка (нажми <b>~</b>), магнитные кнопки и превью проектов при наведении.</p>
+    </div>
+
+    <div class="desk-card polaroid" style="left:8%;top:52%;padding:10px 10px 36px" data-rot="-3">
+      <div class="tape"></div>
+      <img src="https://images.unsplash.com/photo-1526379095098-d400fd0bf935?q=80&w=600&auto=format&fit=crop" alt="">
+      <span>мой стол / ноябрь 2025</span>
+    </div>
+
+    <div class="desk-card" style="left:32%;top:52%;transform:rotate(2deg);width:280px;background:var(--paper)" data-rot="2">
+      <div class="tag" style="background:var(--purple)">стек</div>
+      <h3>Инструменты, которыми пишу каждый день</h3>
+      <p>Python, PostgreSQL, Redis, Docker, Git, React, Tailwind, Figma, 1С, Power BI, n8n, Linux. Учу Go.</p>
+      <div class="meta"><span>Python</span><span>TS</span><span>Docker</span><span>1C</span></div>
+    </div>
+
+    <div class="desk-card" style="left:58%;top:48%;transform:rotate(-2.5deg);width:360px;background:var(--text-dark);color:var(--paper)" data-rot="-2.5">
+      <div class="tag" style="background:var(--paper);color:var(--text-dark)">ищу</div>
+      <h3>Стажировку / Junior Product Analyst / Backend</h3>
+      <p>Хочу в продуктовую команду, где можно трогать и бекенд, и аналитику, и чуть-чуть фронт. Формат: Самара / гибрид / удаленка. Готов к тестовому за 48ч.</p>
+      <div class="meta"><span style="border-color:rgba(243,239,230,.2)">Стажировка</span><span style="border-color:rgba(243,239,230,.2)">Junior</span><span style="border-color:rgba(243,239,230,.2)">Частичная занятость</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="projects" id="projects">
+  <div class="section-head reveal">
+    <h2>Проекты — как на<br>merci-michel, только мои.</h2>
+    <p>Фильтры, hover-превью как на merci-michel.com, клик — кейс. Все проекты живые, с кодом.</p>
+  </div>
+  <div class="filters">
+    <button class="filter-btn active" data-filter="all">Все</button>
+    <button class="filter-btn" data-filter="web">Веб</button>
+    <button class="filter-btn" data-filter="bot">Боты / Автоматизация</button>
+    <button class="filter-btn" data-filter="data">Данные / 1С</button>
+    <button class="filter-btn" data-filter="design">Дизайн-код</button>
+  </div>
+  <div class="grid" id="projectGrid">
+    <!-- cards -->
+    <div class="project-card reveal" data-cat="web data" data-preview="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800&auto=format&fit=crop">
+      <div class="project-media">
+        <span class="float-tag">2025 • web</span>
+        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800&auto=format&fit=crop" alt="">
+      </div>
+      <div class="project-info">
+        <h3>CRM для автосервиса — от заявки до кассы</h3>
+        <p>FastAPI + Postgres + React. Учет клиентов, заказов, склада. Интеграция с Telegram для мастеров. Сократил время оформления на 38%.</p>
+        <div class="project-foot">
+          <div class="stack"><i>FastAPI</i><i>Postgres</i><i>React</i></div>
+          <span style="font-size:11px;opacity:.5">→ кейс</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card reveal" data-cat="bot" data-preview="https://images.unsplash.com/photo-1611605698335-8b1569810432?q=80&w=800&auto=format&fit=crop">
+      <div class="project-media">
+        <span class="float-tag" style="background:var(--purple);color:white">бот</span>
+        <img src="https://images.unsplash.com/photo-1611605698335-8b1569810432?q=80&w=800&auto=format&fit=crop" alt="">
+      </div>
+      <div class="project-info">
+        <h3>Бот расписания СГЭУ</h3>
+        <p>Парсит расписание, шлет пуши за 15 мин до пары, учитывает замены. 800+ пользователей, 4.8★. Деплой на VDS + webhook.</p>
+        <div class="project-foot">
+          <div class="stack"><i>Python</i><i>aiogram</i><i>Redis</i></div>
+          <span style="font-size:11px;opacity:.5">→ github</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card reveal" data-cat="data" data-preview="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800&auto=format&fit=crop">
+      <div class="project-media">
+        <span class="float-tag" style="background:var(--green);color:var(--text-dark)">data</span>
+        <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800&auto=format&fit=crop" alt="">
+      </div>
+      <div class="project-info">
+        <h3>Дашборд продаж для ИП (Power BI + ETL)</h3>
+        <p>ETL из Ozon/WB API → Postgres → Power BI. ABC-анализ, unit-экономика. Владелец теперь видит маржу в реальном времени.</p>
+        <div class="project-foot">
+          <div class="stack"><i>Python</i><i>Power BI</i><i>ETL</i></div>
+          <span style="font-size:11px;opacity:.5">→ демо</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card reveal" data-cat="web design" data-preview="https://images.unsplash.com/photo-1561070791-2526d30994b5?q=80&w=800&auto=format&fit=crop">
+      <div class="project-media">
+        <span class="float-tag">лендинг</span>
+        <img src="https://images.unsplash.com/photo-1561070791-2526d30994b5?q=80&w=800&auto=format&fit=crop" alt="">
+      </div>
+      <div class="project-info">
+        <h3>Лендинг стартапа — как на Borjomi, с параллаксами</h3>
+        <p>Next.js + Framer Motion. Параллакс-бутылка, скролл-триггеры, 95 Lighthouse. Конверсия 6.2% в заявку.</p>
+        <div class="project-foot">
+          <div class="stack"><i>Next.js</i><i>Motion</i><i>Tailwind</i></div>
+          <span style="font-size:11px;opacity:.5">→ сайт</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card reveal" data-cat="bot" data-preview="https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=800&auto=format&fit=crop">
+      <div class="project-media">
+        <span class="float-tag" style="background:var(--orange);color:white">парсер</span>
+        <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=800&auto=format&fit=crop" alt="">
+      </div>
+      <div class="project-info">
+        <h3>n8n + парсер маркетплейсов</h3>
+        <p>Сценарий: мониторит цены конкурентов, складывает в Google Sheets, шлет алерт в Telegram если цена упала. 1200 SKU.</p>
+        <div class="project-foot">
+          <div class="stack"><i>n8n</i><i>Python</i><i>Sheets API</i></div>
+          <span style="font-size:11px;opacity:.5">→ схема</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card reveal" data-cat="data" data-preview="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=800&auto=format&fit=crop">
+      <div class="project-media">
+        <span class="float-tag" style="background:var(--paper);color:var(--text-dark)">1С</span>
+        <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=800&auto=format&fit=crop" alt="">
+      </div>
+      <div class="project-info">
+        <h3>Доработка 1С:УТ — обмен с сайтом</h3>
+        <p>Настроил обмен заказами сайт ↔ 1С, добавил отчет по просрочке, ускорил проведение на 22%. Документация для бухгалтерии.</p>
+        <div class="project-foot">
+          <div class="stack"><i>1С</i><i>HTTP-сервисы</i><i>SQL</i></div>
+          <span style="font-size:11px;opacity:.5">→ описание</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="lab" id="lab">
+  <div class="lab-visual" id="labVisual">
+    <div class="bottle" id="bottle"><div class="bottle-cap"></div></div>
+    <div style="position:absolute;bottom:18px;left:18px;font-size:10px;letter-spacing:.14em;text-transform:uppercase;opacity:.6;color:white">borjomi.com inspired — двигай мышью</div>
+  </div>
+  <div class="lab-content reveal">
+    <div>
+      <div class="eyebrow" style="opacity:.6;color:var(--text-dark)"><i style="background:var(--purple)"></i> лаборатория / lab</div>
+      <h2>Делаю как<br><span style="font-family:'Instrument Serif',serif;font-style:italic;font-weight:400">Borjomi</span> —<br>чтобы хотелось трогать.</h2>
+      <div class="lab-list">
+        <div class="lab-item"><b>01</b><p><strong>Физика вместо статики.</strong> Бейджи в герое — с инерцией и отскоком. Карточки на столе — перетаскиваются. Бутылка — с 3D-параллаксом.</p></div>
+        <div class="lab-item"><b>02</b><p><strong>Командная строка.</strong> Нажми <code style="background:var(--text-dark);color:var(--lime);padding:2px 6px;border-radius:6px">~</code> — откроется терминал как на toyfight.co. Команды: help, projects, skills, contact, clear, bw.</p></div>
+        <div class="lab-item"><b>03</b><p><strong>Цвет Trevor Noah.</strong> Тёмный фон, бумажный, кислотный лайм #E8FF59, оранжевый #FF4E1F и фиолетовый #7C5CFF — контраст как на watch-listen странице.</p></div>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:22px;flex-wrap:wrap">
+      <span class="pill">параллакс</span><span class="pill">drag & drop</span><span class="pill">magnetic</span><span class="pill">hover preview</span><span class="pill">terminal</span>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="contact-big reveal">
+    <h2>Давай<br>делать<br><i>продукт,</i><br>а не просто<br>код.</h2>
+    <div class="contact-actions">
+      <a href="/cdn-cgi/l/email-protection#d4a7bcbda2b5a6b5adb9bbba94b3b9b5bdb8fab7bbb9" class="btn-magnetic btn-dark magnetic" data-label="ПИСАТЬ"><span class="__cf_email__" data-cfemail="a2d1cacbd4c3d0c3dbcfcdcce2c5cfc3cbce8cc1cdcf"><span class="__cf_email__" data-cfemail="f88b90918e998a9981959796b89f95999194d69b9795">[email&#160;protected]</span></span> ↗</a>
+      <a href="https://t.me/raymonkys" target="_blank" class="btn-magnetic btn-light magnetic" data-label="TELEGRAM">Telegram — @raymonkys</a>
+    </div>
+    <div style="position:absolute;right:-10px;bottom:-20px;font-family:'Syne',sans-serif;font-weight:800;font-size:180px;line-height:.8;opacity:.08;pointer-events:none;transform:rotate(-8deg)">МР</div>
+  </div>
+  <div class="contact-side">
+    <div class="contact-card reveal">
+      <h4>навыки — коротко</h4>
+      <div class="big">Python (FastAPI, Django), SQL / Postgres, 1С, React / TS, Docker, Git, Power BI, n8n, Figma, Linux. Английский B2, умею писать ТЗ и говорить с бизнесом.</div>
+      <div style="margin-top:16px;display:flex;gap:6px;flex-wrap:wrap">
+        <span class="pill" style="border-color:var(--line)">БП моделирование</span><span class="pill" style="border-color:var(--line)">REST API</span><span class="pill" style="border-color:var(--line)">Telegram Bots</span>
+      </div>
+    </div>
+    <div class="contact-card reveal" style="background:var(--text-dark);color:var(--paper);border-color:rgba(243,239,230,.1)">
+      <h4 style="color:var(--paper)">сейчас</h4>
+      <div class="big" style="font-size:16px;line-height:1.5">Открыт к стажировке на лето 2026. Могу 20–30 ч/нед во время учебы, full-time летом. Самара / удаленка. Портфолио и код — по запросу вышлю за 10 минут.</div>
+      <div style="margin-top:14px;font-size:11px;opacity:.5">обновлено: сентябрь 2026 • сайт собран за вечер вдохновившись твоими референсами</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>© 2026 Медведев Роман — Прикладная информатика / Samara University</span>
+  <span>сделано с ♥ и интерактивом • нажми ~ для терминала</span>
+</footer>
+
+<div class="terminal" id="terminal">
+  <div class="term-head">
+    <div style="display:flex;gap:8px;align-items:center"><div style="width:10px;height:10px;background:var(--orange);border-radius:50%"></div><div style="width:10px;height:10px;background:var(--lime);border-radius:50%"></div><div style="width:10px;height:10px;background:var(--purple);border-radius:50%"></div><span style="margin-left:12px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;opacity:.6">toyfight-inspired terminal — type help</span></div>
+    <button id="termClose" style="font-size:12px;opacity:.6">ESC закрыть [×]</button>
+  </div>
+  <div class="term-body" id="termBody">
+    <div class="out">Добро пожаловать в портфолио-терминал. Вдохновлено toyfight.co</div>
+    <div class="out">Напиши <span class="cmd">help</span> чтобы увидеть команды.</div>
+    <div style="margin-top:12px" id="termLog"></div>
+  </div>
+  <div class="term-input-row">
+    <span>~/portfolio $</span>
+    <input class="term-input" id="termInput" placeholder="help, projects, skills, contact, clear, bw, lime" autofocus>
+  </div>
+  <div class="term-hint">подсказка: попробуй перетащить карточки на столе, пошвырять бейджи в герое, навести на проекты — превью полетит за курсором</div>
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+/* cursor */
+const cursor = document.getElementById('cursor');
+const cursorDot = document.getElementById('cursorDot');
+let mouseX=0, mouseY=0, dotX=0, dotY=0, curX=0, curY=0;
+window.addEventListener('mousemove', e=>{
+  mouseX=e.clientX; mouseY=e.clientY;
+});
+(function animateCursor(){
+  dotX += (mouseX - dotX)*0.25;
+  dotY += (mouseY - dotY)*0.25;
+  curX += (mouseX - curX)*0.12;
+  curY += (mouseY - curY)*0.12;
+  cursorDot.style.transform=`translate3d(${dotX-2}px,${dotY-2}px,0)`;
+  cursor.style.transform=`translate3d(${curX-18}px,${curY-18}px,0)`;
+  requestAnimationFrame(animateCursor);
+})();
+document.querySelectorAll('a, button, .badge, .desk-card, .project-card, .cta-big').forEach(el=>{
+  el.addEventListener('mouseenter', ()=>{
+    const label = el.getAttribute('data-label') || 'drag';
+    if(el.classList.contains('badge') || el.classList.contains('desk-card')) cursor.setAttribute('data-label','тяни');
+    else cursor.setAttribute('data-label', label);
+    cursor.classList.add('hover');
+  });
+  el.addEventListener('mouseleave', ()=>cursor.classList.remove('hover'));
+});
+
+/* marquee */
+const marqueeItems = ["PYTHON","SQL / POSTGRES","1С:ПРЕДПРИЯТИЕ","REACT + TS","DOCKER","FIGMA → CODE","N8N AUTOMATION","TELEGRAM BOTS","FASTAPI","POWER BI","ETL","PARSING"];
+const track = document.getElementById('marqueeTrack');
+function buildMarquee(){
+  const frag = document.createDocumentFragment();
+  for(let k=0;k<3;k++){
+    marqueeItems.forEach(txt=>{
+      const div=document.createElement('div');
+      div.className='marquee-item';
+      div.textContent=txt;
+      frag.appendChild(div);
+    });
+  }
+  track.appendChild(frag);
+}
+buildMarquee();
+
+/* draggable badges with simple physics */
+const playground = document.getElementById('playground');
+const badges = [...document.querySelectorAll('.badge')];
+let activeBadge=null, offsetX=0, offsetY=0, velX=0, velY=0, lastX=0, lastY=0;
+const bounds = ()=>playground.getBoundingClientRect();
+
+function initBadges(){
+  badges.forEach(b=>{
+    b.dataset.x = parseFloat(b.style.left)|| Math.random()*60+10;
+    b.dataset.y = parseFloat(b.style.top)|| Math.random()*60+10;
+    // keep vx vy
+  });
+}
+initBadges();
+
+badges.forEach(b=>{
+  b.addEventListener('pointerdown', e=>{
+    activeBadge=b;
+    b.setPointerCapture(e.pointerId);
+    const rect=playground.getBoundingClientRect();
+    const bx = parseFloat(b.dataset.x)/100*rect.width;
+    const by = parseFloat(b.dataset.y)/100*rect.height;
+    offsetX = e.clientX - rect.left - bx;
+    offsetY = e.clientY - rect.top - by;
+    lastX=e.clientX; lastY=e.clientY;
+    velX=0; velY=0;
+    b.style.zIndex=20;
+  });
+});
+
+window.addEventListener('pointermove', e=>{
+  if(!activeBadge) return;
+  const rect=playground.getBoundingClientRect();
+  let x = e.clientX - rect.left - offsetX;
+  let y = e.clientY - rect.top - offsetY;
+  x = Math.max(0, Math.min(rect.width - activeBadge.offsetWidth, x));
+  y = Math.max(0, Math.min(rect.height - activeBadge.offsetHeight, y));
+  activeBadge.dataset.x = (x/rect.width*100).toFixed(2);
+  activeBadge.dataset.y = (y/rect.height*100).toFixed(2);
+  activeBadge.style.left = activeBadge.dataset.x+'%';
+  activeBadge.style.top = activeBadge.dataset.y+'%';
+  velX = e.clientX - lastX;
+  velY = e.clientY - lastY;
+  lastX=e.clientX; lastY=e.clientY;
+  // rotate based on velocity
+  const rot = velX*0.4;
+  activeBadge.style.transform=`rotate(${rot}deg)`;
+});
+
+window.addEventListener('pointerup', e=>{
+  if(!activeBadge) return;
+  // throw inertia
+  const b=activeBadge;
+  b.dataset.vx = velX*0.18;
+  b.dataset.vy = velY*0.18;
+  activeBadge=null;
+});
+
+function physicsLoop(){
+  const rect=playground.getBoundingClientRect();
+  badges.forEach(b=>{
+    if(b===activeBadge) return;
+    let vx=parseFloat(b.dataset.vx||0);
+    let vy=parseFloat(b.dataset.vy||0);
+    let x=parseFloat(b.dataset.x)/100*rect.width;
+    let y=parseFloat(b.dataset.y)/100*rect.height;
+    x+=vx; y+=vy;
+    vx*=0.98; vy*=0.98;
+    // bounce
+    if(x<0 || x>rect.width - b.offsetWidth){ vx*=-0.7; x=Math.max(0, Math.min(rect.width - b.offsetWidth, x));}
+    if(y<0 || y>rect.height - b.offsetHeight){ vy*=-0.7; y=Math.max(0, Math.min(rect.height - b.offsetHeight, y));}
+    b.dataset.x=(x/rect.width*100).toFixed(2);
+    b.dataset.y=(y/rect.height*100).toFixed(2);
+    b.dataset.vx=vx.toFixed(3);
+    b.dataset.vy=vy.toFixed(3);
+    b.style.left=b.dataset.x+'%';
+    b.style.top=b.dataset.y+'%';
+  });
+  requestAnimationFrame(physicsLoop);
+}
+physicsLoop();
+
+/* desk drag */
+const desk = document.getElementById('desk');
+const deskCards = [...desk.querySelectorAll('.desk-card')];
+let activeDesk=null, dOffsetX=0, dOffsetY=0, dZ=10;
+deskCards.forEach(card=>{
+  // random initial rotation already via style
+  card.addEventListener('pointerdown', e=>{
+    activeDesk=card;
+    card.setPointerCapture(e.pointerId);
+    const r=desk.getBoundingClientRect();
+    const cr=card.getBoundingClientRect();
+    dOffsetX = e.clientX - cr.left;
+    dOffsetY = e.clientY - cr.top;
+    dZ+=1; card.style.zIndex=dZ;
+  });
+});
+window.addEventListener('pointermove', e=>{
+  if(!activeDesk) return;
+  const r=desk.getBoundingClientRect();
+  let x=e.clientX - r.left - dOffsetX;
+  let y=e.clientY - r.top - dOffsetY;
+  // keep inside a bit
+  x=Math.max(-40, Math.min(r.width - activeDesk.offsetWidth + 40, x));
+  y=Math.max(-20, Math.min(r.height - activeDesk.offsetHeight + 20, y));
+  activeDesk.style.left=x+'px';
+  activeDesk.style.top=y+'px';
+});
+window.addEventListener('pointerup', ()=>{activeDesk=null});
+
+/* project filters */
+const filterBtns=[...document.querySelectorAll('.filter-btn')];
+const projectCards=[...document.querySelectorAll('.project-card')];
+filterBtns.forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    filterBtns.forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    const f=btn.dataset.filter;
+    projectCards.forEach(c=>{
+      if(f==='all' || c.dataset.cat.includes(f)){ c.style.display=''; setTimeout(()=>c.style.opacity='1',10)}
+      else { c.style.opacity='0'; setTimeout(()=>c.style.display='none',200)}
+    });
+  });
+});
+
+/* hover preview */
+const hoverPreview=document.getElementById('hoverPreview');
+let previewImg=hoverPreview.querySelector('img');
+let previewVisible=false;
+projectCards.forEach(card=>{
+  card.addEventListener('mouseenter', ()=>{
+    const src=card.dataset.preview;
+    if(src){ previewImg.src=src; hoverPreview.classList.add('visible'); previewVisible=true; }
+  });
+  card.addEventListener('mouseleave', ()=>{
+    hoverPreview.classList.remove('visible'); previewVisible=false;
+  });
+});
+window.addEventListener('mousemove', e=>{
+  if(!previewVisible) return;
+  hoverPreview.style.left=e.clientX+'px';
+  hoverPreview.style.top=e.clientY+'px';
+});
+
+/* lab bottle parallax like borjomi */
+const bottle=document.getElementById('bottle');
+const labVisual=document.getElementById('labVisual');
+labVisual.addEventListener('mousemove', e=>{
+  const r=labVisual.getBoundingClientRect();
+  const cx=r.left+r.width/2, cy=r.top+r.height/2;
+  const dx=(e.clientX-cx)/r.width, dy=(e.clientY-cy)/r.height;
+  bottle.style.transform=`rotateY(${dx*30}deg) rotateX(${-dy*20}deg) translate3d(${dx*18}px, ${dy*12}px, 40px)`;
+});
+labVisual.addEventListener('mouseleave', ()=>{
+  bottle.style.transform=`rotateY(0deg) rotateX(0deg) translate3d(0,0,0)`;
+});
+
+/* magnetic buttons */
+document.querySelectorAll('.magnetic').forEach(btn=>{
+  btn.addEventListener('mousemove', e=>{
+    const r=btn.getBoundingClientRect();
+    const x=e.clientX - (r.left + r.width/2);
+    const y=e.clientY - (r.top + r.height/2);
+    btn.style.transform=`translate(${x*0.25}px, ${y*0.35}px)`;
+  });
+  btn.addEventListener('mouseleave', ()=>{ btn.style.transform='translate(0,0)'; });
+});
+
+/* reveal on scroll */
+const observer=new IntersectionObserver((entries)=>{
+  entries.forEach(ent=>{ if(ent.isIntersecting) ent.target.classList.add('in') });
+},{threshold:0.12});
+document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+
+/* terminal */
+const terminal=document.getElementById('terminal');
+const termOpen=document.getElementById('termOpen');
+const termClose=document.getElementById('termClose');
+const termInput=document.getElementById('termInput');
+const termLog=document.getElementById('termLog');
+const termBody=document.getElementById('termBody');
+
+function openTerm(){ terminal.classList.add('open'); setTimeout(()=>termInput.focus(),50); }
+function closeTerm(){ terminal.classList.remove('open'); }
+termOpen.addEventListener('click', openTerm);
+termClose.addEventListener('click', closeTerm);
+window.addEventListener('keydown', e=>{
+  if(e.key==='`' || (e.key==='Escape' && terminal.classList.contains('open'))){
+    e.preventDefault();
+    if(terminal.classList.contains('open')) closeTerm(); else openTerm();
+  }
+});
+
+const commands={
+  help:`Доступные команды:
+  <span class="cmd">help</span> — список команд
+  <span class="cmd">about</span> — обо мне
+  <span class="cmd">projects</span> — проекты
+  <span class="cmd">skills</span> — стек
+  <span class="cmd">contact</span> — контакты
+  <span class="cmd">clear</span> — очистить
+  <span class="cmd">bw</span> / <span class="cmd">lime</span> / <span class="cmd">reset</span> — темы`,
+  about:`Роман, 20 лет, Самара. 3 курс Прикладная информатика. Делаю веб-продукты и автоматизацию. Люблю когда интерфейс можно трогать.`,
+  projects:`6 проектов в портфолио: CRM автосервиса, бот СГЭУ, дашборд WB/Ozon, лендинг с параллаксом, n8n парсер, доработка 1С. Код на GitHub по запросу.`,
+  skills:`Python / FastAPI / Django, Postgres / SQL, 1С:Предприятие, React + TS, Docker, n8n, Power BI, Figma, Git. Soft: говорю с бизнесом, пишу ТЗ, не пропадаю.`,
+  contact:`Почта: shivaraymon@gmail.com\nTelegram: @raymonkys\nGitHub: github.com/kirill-pi\nСамара, открыт к стажировке лето 2026`,
+  bw:`Тема: ч/б активирована`,
+  lime:`Тема: кислотный лайм`,
+  reset:`Тема сброшена`,
+  toyfight:`The Unmistakably Original® — вдохновлено ToyFight.co — командная строка, магнитные кнопки, playful`,
+};
+
+termInput.addEventListener('keydown', e=>{
+  if(e.key==='Enter'){
+    const val=termInput.value.trim().toLowerCase();
+    const line=document.createElement('div');
+    line.innerHTML=`<span style="color:var(--lime)">~/portfolio $</span> ${termInput.value}`;
+    termLog.appendChild(line);
+    if(val==='clear'){ termLog.innerHTML=''; }
+    else if(commands[val]){
+      const out=document.createElement('div');
+      out.className='out';
+      out.style.whiteSpace='pre-wrap';
+      out.innerHTML=commands[val];
+      termLog.appendChild(out);
+      // easter themes
+      if(val==='bw'){ document.documentElement.style.filter='grayscale(1)'; }
+      if(val==='lime'){ document.body.style.background='#E8FF59'; document.body.style.color='#0E0E0E'; }
+      if(val==='reset'){ document.documentElement.style.filter=''; document.body.style.background=''; document.body.style.color=''; }
+      if(val==='projects'){ document.getElementById('projects').scrollIntoView({behavior:'smooth'}); closeTerm(); }
+      if(val==='contact'){ document.getElementById('contact').scrollIntoView({behavior:'smooth'}); closeTerm(); }
+    } else if(val){
+      const out=document.createElement('div');
+      out.className='out';
+      out.textContent=`команда не найдена: ${val}. Напиши help`;
+      termLog.appendChild(out);
+    }
+    termInput.value='';
+    termBody.scrollTop=termBody.scrollHeight;
+  }
+});
+
+// small fun: shuffle desk button via console
+window.shuffleDesk=()=>{
+  deskCards.forEach(c=>{
+    const r=desk.getBoundingClientRect();
+    c.style.left=Math.random()*(r.width-c.offsetWidth)+'px';
+    c.style.top=Math.random()*(r.height-c.offsetHeight)+'px';
+    c.style.transform=`rotate(${(Math.random()*12-6).toFixed(1)}deg)`;
+  });
+};
+console.log('%c Портфолио ПИ — интерактив как ты просил. Нажми ~ для терминала. Вызови shuffleDesk() в консоли чтобы перемешать стол. ', 'background:#E8FF59;color:#0E0E0E;padding:8px 12px;border-radius:8px;font-weight:700');
+</script>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a496f246ebc59a38',t:'MTc5MTgxNjkzNQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
